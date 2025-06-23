@@ -63,7 +63,7 @@ const Dashboard = () => {
     },
     {
       title: 'Total Deposits',
-      value: `$${monthlySummary.totalDeposits || 0}`,
+      value: `${monthlySummary.totalDeposits || 0}`,
       icon: DollarSign,
       color: 'bg-yellow-500',
       change: '+8%',
@@ -71,7 +71,7 @@ const Dashboard = () => {
     },
     {
       title: 'Total Bazaar Cost',
-      value: `$${monthlySummary.totalBazaarCost || 0}`,
+      value: `${monthlySummary.totalBazaarCost || 0}`,
       icon: ShoppingCart,
       color: 'bg-red-500',
       change: '+15%',
@@ -215,7 +215,7 @@ const Dashboard = () => {
                   <p className="text-sm text-gray-600">{cost.description}</p>
                 </div>
                 <div className="text-right">
-                  <p className="font-semibold text-gray-900">${cost.amount}</p>
+                  <p className="font-semibold text-gray-900">{cost.amount} Taka</p>
                   <p className="text-sm text-gray-600">{cost.items.length} items</p>
                 </div>
               </div>
@@ -280,16 +280,16 @@ const Dashboard = () => {
                     {user.totalMeals}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${user.totalDeposits}
+                    {user.totalDeposits}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${user.mealCost?.toFixed(2)}
+                    {user.mealCost?.toFixed(2)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`text-sm font-medium ${
                       user.balance >= 0 ? 'text-green-600' : 'text-red-600'
                     }`}>
-                      ${user.balance?.toFixed(2)}
+                      {user.balance?.toFixed(2)}
                     </span>
                   </td>
                 </tr>
