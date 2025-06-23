@@ -48,23 +48,34 @@ function PublicRoute({ children }) {
 
 function AppLayout() {
   return (
-    <div className="flex">
-      {/* Sidebar is fixed on the left */}
-      <Sidebar />
-      {/* Main content fills the rest, with left margin for sidebar */}
-      <main className="min-h-screen bg-gray-50 flex-1 p-6">
-        <div className="max-w-6xl w-full">
-          <Routes>
-            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="/meals" element={<ProtectedRoute><MealManagement /></ProtectedRoute>} />
-            <Route path="/deposits" element={<ProtectedRoute><Deposits /></ProtectedRoute>} />
-            <Route path="/members" element={<ProtectedRoute><Members /></ProtectedRoute>} />
-            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-            {/* Add more routes here as you build more pages */}
-            <Route path="*" element={<Navigate to="/dashboard" />} />
-          </Routes>
-        </div>
-      </main>
+    <div className="flex h-screen bg-gray-50">
+      {/* Sidebar - Fixed width and height */}
+      <div className="hidden lg:block lg:w-64 lg:flex-shrink-0">
+        <Sidebar />
+      </div>
+      
+      {/* Mobile sidebar overlay */}
+      <div className="lg:hidden">
+        <Sidebar />
+      </div>
+      
+      {/* Main content area - Takes remaining width and height */}
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Main content with scroll */}
+        <main className="flex-1 overflow-y-auto p-6">
+          <div className="max-w-6xl w-full mx-auto">
+            <Routes>
+              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/meals" element={<ProtectedRoute><MealManagement /></ProtectedRoute>} />
+              <Route path="/deposits" element={<ProtectedRoute><Deposits /></ProtectedRoute>} />
+              <Route path="/members" element={<ProtectedRoute><Members /></ProtectedRoute>} />
+              <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              {/* Add more routes here as you build more pages */}
+              <Route path="*" element={<Navigate to="/dashboard" />} />
+            </Routes>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }
