@@ -15,16 +15,20 @@ function ProtectedRoute({ children }) {
 
 function AppLayout() {
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex">
+      {/* Sidebar is fixed on the left */}
       <Sidebar />
-      <main className="flex-1 ml-0 lg:ml-64 p-0">
-        <Routes>
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/meals" element={<ProtectedRoute><MealManagement /></ProtectedRoute>} />
-          <Route path="/deposits" element={<ProtectedRoute><Deposits /></ProtectedRoute>} />
-          {/* Add more routes here as you build more pages */}
-          <Route path="*" element={<Navigate to="/dashboard" />} />
-        </Routes>
+      {/* Main content fills the rest, with left margin for sidebar */}
+      <main className="min-h-screen bg-gray-50 flex-1 p-6">
+        <div className="max-w-6xl w-full">
+          <Routes>
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/meals" element={<ProtectedRoute><MealManagement /></ProtectedRoute>} />
+            <Route path="/deposits" element={<ProtectedRoute><Deposits /></ProtectedRoute>} />
+            {/* Add more routes here as you build more pages */}
+            <Route path="*" element={<Navigate to="/dashboard" />} />
+          </Routes>
+        </div>
       </main>
     </div>
   );
