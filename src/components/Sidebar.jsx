@@ -10,7 +10,9 @@ import {
   FileText, 
   LogOut,
   Menu,
-  X
+  X,
+  User,
+  Settings
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -59,7 +61,7 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     logout();
-    window.location.href = '/';
+    window.location.href = '/login';
   };
 
   const generatePDF = () => {
@@ -70,10 +72,10 @@ const Sidebar = () => {
   return (
     <>
       {/* Mobile menu button */}
-      <div className="lg:hidden fixed top-4 left-4 z-50 h-screen">
+      <div className="lg:hidden fixed top-4 left-4 z-50">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="p-2 rounded-md bg-indigo-600 text-white"
+          className="p-2 rounded-md bg-indigo-600 text-white shadow-lg"
         >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -90,13 +92,30 @@ const Sidebar = () => {
             <h1 className="text-xl font-bold">Mess Manager</h1>
           </div>
 
+          {/* User Info */}
+          <div className="p-4 border-b border-gray-200 bg-gray-50">
+            <div className="flex items-center space-x-3">
+              <div className="bg-indigo-100 p-2 rounded-full">
+                <User className="h-6 w-6 text-indigo-600" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900 truncate">
+                  {currentUser?.name}
+                </p>
+                <p className="text-xs text-gray-500 truncate">
+                  {currentUser?.email}
+                </p>
+                <p className="text-xs text-indigo-600 font-medium capitalize">
+                  {currentUser?.role}
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Mess Info */}
           <div className="p-4 border-b border-gray-200">
-            <h2 className="font-semibold text-gray-900">{currentMess?.name}</h2>
-            <p className="text-sm text-gray-600">{currentMess?.address}</p>
-            <p className="text-xs text-gray-500 mt-1">
-              Role: {currentUser?.role === 'manager' ? 'Manager' : 'Viewer'}
-            </p>
+            <h2 className="font-semibold text-gray-900 text-sm">{currentMess?.name}</h2>
+            <p className="text-xs text-gray-600 truncate">{currentMess?.address}</p>
           </div>
 
           {/* Navigation Menu */}
@@ -127,8 +146,23 @@ const Sidebar = () => {
             })}
           </nav>
 
-          {/* Actions */}
+          {/* User Actions */}
           <div className="p-4 border-t border-gray-200 space-y-2">
+            <Link
+              to="/profile"
+              className={`
+                w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors
+                ${location.pathname === '/profile'
+                  ? 'bg-indigo-100 text-indigo-700'
+                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                }
+              `}
+              onClick={() => setIsOpen(false)}
+            >
+              <Settings className="mr-3 h-5 w-5" />
+              Profile Settings
+            </Link>
+            
             <button
               onClick={generatePDF}
               className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md transition-colors"
