@@ -62,7 +62,7 @@ function AppLayout() {
       {/* Main content area - Takes remaining width and height */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Main content with scroll */}
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto md:p-6 pt-16">
           <div className="max-w-6xl w-full mx-auto">
             <Routes>
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
