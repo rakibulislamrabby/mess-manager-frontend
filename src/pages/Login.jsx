@@ -1,24 +1,37 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { LogIn, Users, Plus, UserCheck } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { LogIn, Users, Plus, UserCheck, Eye, EyeOff } from 'lucide-react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showMessOptions, setShowMessOptions] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [messName, setMessName] = useState('');
   const [messAddress, setMessAddress] = useState('');
   const [messId, setMessId] = useState('');
 
-  const { login, createMess, joinMess } = useAuth();
+  const { login, createMess, joinMess, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Check for success message from registration
+  useEffect(() => {
+    if (location.state?.message) {
+      setSuccess(location.state.message);
+      // Clear the message from location state
+      navigate(location.pathname, { replace: true });
+    }
+  }, [location, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
     setIsLoading(true);
 
     const result = await login(email, password);
@@ -45,7 +58,7 @@ const Login = () => {
     if (result.success) {
       navigate('/dashboard');
     } else {
-      setError('Failed to create mess');
+      setError(result.error);
     }
     
     setIsLoading(false);
@@ -61,11 +74,23 @@ const Login = () => {
     if (result.success) {
       navigate('/dashboard');
     } else {
-      setError('Failed to join mess');
+      setError(result.error);
     }
     
     setIsLoading(false);
   };
+
+  // Show loading screen while auth is initializing
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (showMessOptions) {
     return (
@@ -180,6 +205,12 @@ const Login = () => {
         </div>
 
         <div className="bg-white rounded-lg shadow-lg p-6">
+          {success && (
+            <div className="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
+              {success}
+            </div>
+          )}
+
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -199,14 +230,27 @@ const Login = () => {
               <label className="block text-sm font-medium text-gray-700">
                 Password
               </label>
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="Enter your password"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="mt-1 block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="Enter your password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5 text-gray-400" />
+                  ) : (
+                    <Eye className="h-5 w-5 text-gray-400" />
+                  )}
+                </button>
+              </div>
             </div>
 
             {error && (
@@ -224,7 +268,16 @@ const Login = () => {
             </button>
           </form>
 
-          <div className="mt-6 text-center">
+          <div className="mt-6 text-center space-y-2">
+            <p className="text-sm text-gray-600">
+              Don't have an account?{' '}
+              <Link 
+                to="/register" 
+                className="font-medium text-indigo-600 hover:text-indigo-500"
+              >
+                Create one here
+              </Link>
+            </p>
             <p className="text-xs text-gray-500">
               Demo credentials: john@example.com / password123
             </p>

@@ -7,9 +7,9 @@ const MealManagement = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [newMeal, setNewMeal] = useState({
     date: new Date().toISOString().split('T')[0],
-    breakfast: [],
-    lunch: [],
-    dinner: []
+    breakfast: {},
+    lunch: {},
+    dinner: {}
   });
 
   useEffect(() => {
@@ -17,18 +17,24 @@ const MealManagement = () => {
   }, []);
 
   const handleAddMeal = () => {
+    let totalMeals = 0;
+    Object.values(newMeal.breakfast).forEach(v => totalMeals += v || 0);
+    Object.values(newMeal.lunch).forEach(v => totalMeals += v || 0);
+    Object.values(newMeal.dinner).forEach(v => totalMeals += v || 0);
     const mealData = {
       id: Date.now(),
-      ...newMeal,
-      totalMeals: newMeal.breakfast.length + newMeal.lunch.length + newMeal.dinner.length
+      date: newMeal.date,
+      breakfast: Object.entries(newMeal.breakfast).filter(([_, v]) => v > 0).map(([id]) => parseInt(id)),
+      lunch: Object.entries(newMeal.lunch).filter(([_, v]) => v > 0).map(([id]) => parseInt(id)),
+      dinner: Object.entries(newMeal.dinner).filter(([_, v]) => v > 0).map(([id]) => parseInt(id)),
+      totalMeals
     };
-
     setMeals([...meals, mealData]);
     setNewMeal({
       date: new Date().toISOString().split('T')[0],
-      breakfast: [],
-      lunch: [],
-      dinner: []
+      breakfast: {},
+      lunch: {},
+      dinner: {}
     });
     setShowAddForm(false);
   };
@@ -37,13 +43,18 @@ const MealManagement = () => {
     setMeals(meals.filter(meal => meal.id !== mealId));
   };
 
-  const toggleMemberMeal = (mealType, userId) => {
+  const handleMealCountChange = (mealType, userId, value) => {
     setNewMeal(prev => ({
       ...prev,
-      [mealType]: prev[mealType].includes(userId)
-        ? prev[mealType].filter(id => id !== userId)
-        : [...prev[mealType], userId]
+      [mealType]: {
+        ...prev[mealType],
+        [userId]: Math.max(0, Math.round(value * 2) / 2)
+      }
     }));
+  };
+
+  const getMealCount = (mealType, userId) => {
+    return newMeal[mealType][userId] || 0;
   };
 
   const getMemberName = (userId) => {
@@ -61,16 +72,16 @@ const MealManagement = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Meal Management</h1>
-          <p className="text-gray-600">Manage daily meal entries for all members</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Meal Management</h1>
+          <p className="text-gray-600 text-sm sm:text-base">Manage daily meal entries for all members</p>
         </div>
         <button
           onClick={() => setShowAddForm(true)}
-          className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
+          className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors text-sm sm:text-base cursor-pointer"
         >
           <Plus className="h-5 w-5 mr-2" />
           Add Meal Entry
@@ -79,8 +90,8 @@ const MealManagement = () => {
 
       {/* Add Meal Form */}
       {showAddForm && (
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Add New Meal Entry</h2>
+        <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Add New Meal Entry</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Date Selection */}
@@ -92,7 +103,7 @@ const MealManagement = () => {
                 type="date"
                 value={newMeal.date}
                 onChange={(e) => setNewMeal({...newMeal, date: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
               />
             </div>
 
@@ -100,10 +111,10 @@ const MealManagement = () => {
             <div className="bg-gray-50 p-4 rounded-lg">
               <h3 className="font-medium text-gray-900 mb-2">Meal Summary</h3>
               <div className="space-y-1 text-sm">
-                <p>Breakfast: {newMeal.breakfast.length} members</p>
-                <p>Lunch: {newMeal.lunch.length} members</p>
-                <p>Dinner: {newMeal.dinner.length} members</p>
-                <p className="font-semibold">Total: {newMeal.breakfast.length + newMeal.lunch.length + newMeal.dinner.length} meals</p>
+                <p>Breakfast: {Object.values(newMeal.breakfast).filter(v => v > 0).length} members</p>
+                <p>Lunch: {Object.values(newMeal.lunch).filter(v => v > 0).length} members</p>
+                <p>Dinner: {Object.values(newMeal.dinner).filter(v => v > 0).length} members</p>
+                <p className="font-semibold">Total: {Object.values(newMeal.breakfast).filter(v => v > 0).length + Object.values(newMeal.lunch).filter(v => v > 0).length + Object.values(newMeal.dinner).filter(v => v > 0).length} meals</p>
               </div>
             </div>
           </div>
@@ -111,70 +122,66 @@ const MealManagement = () => {
           {/* Member Selection */}
           <div className="mt-6">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Select Members for Each Meal</h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Breakfast */}
-              <div className="border border-gray-200 rounded-lg p-4">
-                <h4 className="font-medium text-gray-900 mb-3 flex items-center">
-                  <Calendar className="h-4 w-4 mr-2" />
-                  Breakfast
-                </h4>
-                <div className="space-y-2">
+            <div className="overflow-x-auto">
+              <table className="min-w-[600px] w-full divide-y divide-gray-200 bg-white rounded-lg text-xs sm:text-sm">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-2 sm:px-4 py-2 text-left font-medium text-gray-500 uppercase tracking-wider">Member</th>
+                    <th className="px-2 sm:px-4 py-2 text-center font-medium text-gray-500 uppercase tracking-wider">Breakfast</th>
+                    <th className="px-2 sm:px-4 py-2 text-center font-medium text-gray-500 uppercase tracking-wider">Lunch</th>
+                    <th className="px-2 sm:px-4 py-2 text-center font-medium text-gray-500 uppercase tracking-wider">Dinner</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
                   {mockUsers.map((user) => (
-                    <label key={user.id} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={newMeal.breakfast.includes(user.id)}
-                        onChange={() => toggleMemberMeal('breakfast', user.id)}
-                        className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      />
-                      <span className="ml-2 text-sm text-gray-700">{user.name}</span>
-                    </label>
+                    <tr key={user.id}>
+                      <td className="px-2 sm:px-4 py-2 whitespace-nowrap font-medium text-gray-900">{user.name}</td>
+                      <td className="px-2 sm:px-4 py-2 text-center">
+                        <div className="flex items-center justify-center gap-2">
+                          <button type="button" className="px-2 py-1 bg-gray-100 rounded" onClick={() => handleMealCountChange('breakfast', user.id, getMealCount('breakfast', user.id) - 0.5)}>-</button>
+                          <input
+                            type="number"
+                            min={0}
+                            step={0.5}
+                            value={getMealCount('breakfast', user.id)}
+                            onChange={e => handleMealCountChange('breakfast', user.id, parseFloat(e.target.value) || 0)}
+                            className="w-14 sm:w-16 text-center border border-gray-300 rounded"
+                          />
+                          <button type="button" className="px-2 py-1 bg-gray-100 rounded" onClick={() => handleMealCountChange('breakfast', user.id, getMealCount('breakfast', user.id) + 0.5)}>+</button>
+                        </div>
+                      </td>
+                      <td className="px-2 sm:px-4 py-2 text-center">
+                        <div className="flex items-center justify-center gap-2">
+                          <button type="button" className="px-2 py-1 bg-gray-100 rounded" onClick={() => handleMealCountChange('lunch', user.id, getMealCount('lunch', user.id) - 0.5)}>-</button>
+                          <input
+                            type="number"
+                            min={0}
+                            step={0.5}
+                            value={getMealCount('lunch', user.id)}
+                            onChange={e => handleMealCountChange('lunch', user.id, parseFloat(e.target.value) || 0)}
+                            className="w-14 sm:w-16 text-center border border-gray-300 rounded"
+                          />
+                          <button type="button" className="px-2 py-1 bg-gray-100 rounded" onClick={() => handleMealCountChange('lunch', user.id, getMealCount('lunch', user.id) + 0.5)}>+</button>
+                        </div>
+                      </td>
+                      <td className="px-2 sm:px-4 py-2 text-center">
+                        <div className="flex items-center justify-center gap-2">
+                          <button type="button" className="px-2 py-1 bg-gray-100 rounded" onClick={() => handleMealCountChange('dinner', user.id, getMealCount('dinner', user.id) - 0.5)}>-</button>
+                          <input
+                            type="number"
+                            min={0}
+                            step={0.5}
+                            value={getMealCount('dinner', user.id)}
+                            onChange={e => handleMealCountChange('dinner', user.id, parseFloat(e.target.value) || 0)}
+                            className="w-14 sm:w-16 text-center border border-gray-300 rounded"
+                          />
+                          <button type="button" className="px-2 py-1 bg-gray-100 rounded" onClick={() => handleMealCountChange('dinner', user.id, getMealCount('dinner', user.id) + 0.5)}>+</button>
+                        </div>
+                      </td>
+                    </tr>
                   ))}
-                </div>
-              </div>
-
-              {/* Lunch */}
-              <div className="border border-gray-200 rounded-lg p-4">
-                <h4 className="font-medium text-gray-900 mb-3 flex items-center">
-                  <Calendar className="h-4 w-4 mr-2" />
-                  Lunch
-                </h4>
-                <div className="space-y-2">
-                  {mockUsers.map((user) => (
-                    <label key={user.id} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={newMeal.lunch.includes(user.id)}
-                        onChange={() => toggleMemberMeal('lunch', user.id)}
-                        className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      />
-                      <span className="ml-2 text-sm text-gray-700">{user.name}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Dinner */}
-              <div className="border border-gray-200 rounded-lg p-4">
-                <h4 className="font-medium text-gray-900 mb-3 flex items-center">
-                  <Calendar className="h-4 w-4 mr-2" />
-                  Dinner
-                </h4>
-                <div className="space-y-2">
-                  {mockUsers.map((user) => (
-                    <label key={user.id} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={newMeal.dinner.includes(user.id)}
-                        onChange={() => toggleMemberMeal('dinner', user.id)}
-                        className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      />
-                      <span className="ml-2 text-sm text-gray-700">{user.name}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
+                </tbody>
+              </table>
             </div>
           </div>
 
@@ -182,13 +189,13 @@ const MealManagement = () => {
           <div className="mt-6 flex justify-end space-x-3">
             <button
               onClick={() => setShowAddForm(false)}
-              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               onClick={handleAddMeal}
-              className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+              className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors cursor-pointer"
             >
               <Save className="h-4 w-4 mr-2" />
               Save Meal Entry
@@ -196,92 +203,8 @@ const MealManagement = () => {
           </div>
         </div>
       )}
-
-      {/* Meal Entries Table */}
-      <div className="bg-white rounded-lg shadow-md">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900">Meal Entries</h2>
-        </div>
-        
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Date
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Breakfast
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Lunch
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Dinner
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Total Meals
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {meals.map((meal) => (
-                <tr key={meal.id}>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
-                      {formatDate(meal.date)}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="text-sm text-gray-900">
-                      {meal.breakfast.length} members
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {meal.breakfast.map(id => getMemberName(id)).join(', ')}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="text-sm text-gray-900">
-                      {meal.lunch.length} members
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {meal.lunch.map(id => getMemberName(id)).join(', ')}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="text-sm text-gray-900">
-                      {meal.dinner.length} members
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {meal.dinner.map(id => getMemberName(id)).join(', ')}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                      {meal.totalMeals} meals
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button
-                      onClick={() => handleDeleteMeal(meal.id)}
-                      className="text-red-600 hover:text-red-900 flex items-center"
-                    >
-                      <Trash2 className="h-4 w-4 mr-1" />
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+{/* Summary Stats */}
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="flex items-center">
             <Users className="h-8 w-8 text-blue-600" />
@@ -314,6 +237,78 @@ const MealManagement = () => {
           </div>
         </div>
       </div>
+      {/* Meal Entries Table */}
+      <div className="bg-white rounded-lg shadow-md">
+        <div className="px-2 sm:px-6 py-4 border-b border-gray-200">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Meal Entries</h2>
+        </div>
+        
+        <div className="overflow-x-auto">
+          <table className="min-w-[600px] w-full divide-y divide-gray-200 text-xs sm:text-sm">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-2 sm:px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                <th className="px-2 sm:px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Breakfast</th>
+                <th className="px-2 sm:px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Lunch</th>
+                <th className="px-2 sm:px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Dinner</th>
+                <th className="px-2 sm:px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Total Meals</th>
+                <th className="px-2 sm:px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {meals.map((meal) => (
+                <tr key={meal.id}>
+                  <td className="px-2 sm:px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">
+                      {formatDate(meal.date)}
+                    </div>
+                  </td>
+                  <td className="px-2 sm:px-6 py-4">
+                    <div className="text-sm text-gray-900">
+                      {meal.breakfast.length} members
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {meal.breakfast.map(id => getMemberName(id)).join(', ')}
+                    </div>
+                  </td>
+                  <td className="px-2 sm:px-6 py-4">
+                    <div className="text-sm text-gray-900">
+                      {meal.lunch.length} members
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {meal.lunch.map(id => getMemberName(id)).join(', ')}
+                    </div>
+                  </td>
+                  <td className="px-2 sm:px-6 py-4">
+                    <div className="text-sm text-gray-900">
+                      {meal.dinner.length} members
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {meal.dinner.map(id => getMemberName(id)).join(', ')}
+                    </div>
+                  </td>
+                  <td className="px-2 sm:px-6 py-4 whitespace-nowrap">
+                    <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                      {meal.totalMeals} meals
+                    </span>
+                  </td>
+                  <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button
+                      onClick={() => handleDeleteMeal(meal.id)}
+                      className="text-red-600 hover:text-red-900 flex items-center cursor-pointer"
+                    >
+                      <Trash2 className="h-4 w-4 mr-1" />
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      
     </div>
   );
 };

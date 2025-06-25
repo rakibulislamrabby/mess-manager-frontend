@@ -4,41 +4,61 @@ export const mockUsers = [
     id: 1,
     name: "John Doe",
     email: "john@example.com",
+    phone: "+880 1712345678",
     role: "manager", // manager or viewer
     messId: 1,
     balance: 0,
     totalMeals: 0,
-    totalDeposits: 0
+    totalDeposits: 0,
+    joinDate: "2024-01-15",
+    address: "Dhaka, Bangladesh",
+    status: "active",
+    avatar: "JD"
   },
   {
     id: 2,
-    name: "Jane Smith",
-    email: "jane@example.com",
-    role: "manager",
+    name: "David Shawon",
+    email: "shawon@example.com",
+    phone: "+880 1812345678",
+    role: "member",
     messId: 1,
     balance: 0,
     totalMeals: 0,
-    totalDeposits: 0
+    totalDeposits: 0,
+    joinDate: "2023-12-01",
+    address: "Chittagong, Bangladesh",
+    status: "active",
+    avatar: "JS"
   },
   {
     id: 3,
-    name: "Bob Johnson",
-    email: "bob@example.com",
+    name: "Bob Zesan",
+    email: "zesan@example.com",
+    phone: "+880 1912345678",
     role: "viewer",
     messId: 1,
     balance: 0,
     totalMeals: 0,
-    totalDeposits: 0
+    totalDeposits: 0,
+    joinDate: "2024-02-10",
+    address: "Sylhet, Bangladesh",
+    status: "inactive",
+    avatar: "BJ"
   },
   {
     id: 4,
-    name: "Alice Brown",
-    email: "alice@example.com",
-    role: "manager",
+    name: "Alice Masum",
+    email: "masum@example.com",
+    phone: "+880 1612345678",
+    role: "member",
     messId: 1,
     balance: 0,
     totalMeals: 0,
-    totalDeposits: 0
+    totalDeposits: 0,
+    joinDate: "2024-03-05",
+    address: "Rajshahi, Bangladesh",
+    status: "active",
+    avatar: "AB"
   }
 ];
 
