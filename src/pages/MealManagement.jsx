@@ -81,7 +81,7 @@ const MealManagement = () => {
         </div>
         <button
           onClick={() => setShowAddForm(true)}
-          className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors text-sm sm:text-base"
+          className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors text-sm sm:text-base cursor-pointer"
         >
           <Plus className="h-5 w-5 mr-2" />
           Add Meal Entry
@@ -189,13 +189,13 @@ const MealManagement = () => {
           <div className="mt-6 flex justify-end space-x-3">
             <button
               onClick={() => setShowAddForm(false)}
-              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               onClick={handleAddMeal}
-              className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+              className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors cursor-pointer"
             >
               <Save className="h-4 w-4 mr-2" />
               Save Meal Entry
@@ -203,7 +203,40 @@ const MealManagement = () => {
           </div>
         </div>
       )}
-
+{/* Summary Stats */}
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="flex items-center">
+            <Users className="h-8 w-8 text-blue-600" />
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Total Entries</p>
+              <p className="text-2xl font-bold text-gray-900">{meals.length}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="flex items-center">
+            <Calendar className="h-8 w-8 text-green-600" />
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Total Meals</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {meals.reduce((sum, meal) => sum + meal.totalMeals, 0)}
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="flex items-center">
+            <Users className="h-8 w-8 text-indigo-600" />
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Active Members</p>
+              <p className="text-2xl font-bold text-gray-900">{mockUsers.length}</p>
+            </div>
+          </div>
+        </div>
+      </div>
       {/* Meal Entries Table */}
       <div className="bg-white rounded-lg shadow-md">
         <div className="px-2 sm:px-6 py-4 border-b border-gray-200">
@@ -262,7 +295,7 @@ const MealManagement = () => {
                   <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button
                       onClick={() => handleDeleteMeal(meal.id)}
-                      className="text-red-600 hover:text-red-900 flex items-center"
+                      className="text-red-600 hover:text-red-900 flex items-center cursor-pointer"
                     >
                       <Trash2 className="h-4 w-4 mr-1" />
                       Delete
@@ -275,40 +308,7 @@ const MealManagement = () => {
         </div>
       </div>
 
-      {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-center">
-            <Users className="h-8 w-8 text-blue-600" />
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Total Entries</p>
-              <p className="text-2xl font-bold text-gray-900">{meals.length}</p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-center">
-            <Calendar className="h-8 w-8 text-green-600" />
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Total Meals</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {meals.reduce((sum, meal) => sum + meal.totalMeals, 0)}
-              </p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-center">
-            <Users className="h-8 w-8 text-indigo-600" />
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Active Members</p>
-              <p className="text-2xl font-bold text-gray-900">{mockUsers.length}</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      
     </div>
   );
 };

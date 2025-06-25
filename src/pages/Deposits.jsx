@@ -87,7 +87,7 @@ const Deposits = () => {
         </div>
         <button
           onClick={() => setShowAddForm(true)}
-          className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
+          className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors cursor-pointer"
         >
           <Plus className="h-5 w-5 mr-2" />
           Add Deposit
@@ -200,7 +200,7 @@ const Deposits = () => {
           <div className="mt-6 flex justify-end space-x-3">
             <button
               onClick={() => setShowAddForm(false)}
-              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors cursor-pointer"
             >
               Cancel
             </button>
@@ -299,7 +299,7 @@ const Deposits = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button
                       onClick={() => handleDeleteDeposit(deposit.id)}
-                      className="text-red-600 hover:text-red-900 flex items-center"
+                      className="text-red-600 hover:text-red-900 flex items-center cursor-pointer"
                     >
                       <Trash2 className="h-4 w-4 mr-1" />
                       Delete

@@ -14,6 +14,7 @@ import {
   User,
   Settings
 } from 'lucide-react';
+import { jsPDF } from 'jspdf';
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -65,8 +66,10 @@ const Sidebar = () => {
   };
 
   const generatePDF = () => {
-    // This will be implemented in the Reports component
-    window.location.href = '/reports';
+    const doc = new jsPDF();
+
+    doc.text("Hello world!", 10, 10);
+    doc.save("example.pdf");
   };
 
   return (
