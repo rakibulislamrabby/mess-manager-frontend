@@ -17,8 +17,8 @@ export const mockUsers = [
   },
   {
     id: 2,
-    name: "Jane Smith",
-    email: "jane@example.com",
+    name: "David Shawon",
+    email: "shawon@example.com",
     phone: "+880 1812345678",
     role: "member",
     messId: 1,
@@ -32,8 +32,8 @@ export const mockUsers = [
   },
   {
     id: 3,
-    name: "Bob Johnson",
-    email: "bob@example.com",
+    name: "Bob Zesan",
+    email: "zesan@example.com",
     phone: "+880 1912345678",
     role: "viewer",
     messId: 1,
@@ -47,8 +47,8 @@ export const mockUsers = [
   },
   {
     id: 4,
-    name: "Alice Brown",
-    email: "alice@example.com",
+    name: "Alice Masum",
+    email: "masum@example.com",
     phone: "+880 1612345678",
     role: "member",
     messId: 1,
