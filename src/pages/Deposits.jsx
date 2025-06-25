@@ -98,10 +98,10 @@ const Deposits = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="flex items-center">
-            <DollarSign className="h-8 w-8 text-green-600" />
+            <span className='text-3xl font-extrabold text-gray-900'>৳</span>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Total Deposits</p>
-              <p className="text-2xl font-bold text-gray-900">${totalDeposits.toFixed(2)}</p>
+              <p className="text-2xl font-bold text-gray-900">{totalDeposits.toFixed(2)} ৳</p>
             </div>
           </div>
         </div>
@@ -154,7 +154,7 @@ const Deposits = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Amount ($)
+                Amount (৳)
               </label>
               <input
                 type="number"
@@ -283,7 +283,7 @@ const Deposits = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="text-sm font-semibold text-green-600">
-                      ${deposit.amount.toFixed(2)}
+                    ৳{deposit.amount.toFixed(2)}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -331,7 +331,7 @@ const Deposits = () => {
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-gray-600">
-                  Total: <span className="font-semibold text-green-600">${member.totalDeposits.toFixed(2)}</span>
+                  Total: <span className="font-semibold text-green-600">৳{member.totalDeposits.toFixed(2)}</span>
                 </p>
                 <p className="text-xs text-gray-500">
                   {member.depositCount} deposit{member.depositCount !== 1 ? 's' : ''}

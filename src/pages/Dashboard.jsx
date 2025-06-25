@@ -55,7 +55,7 @@ const Dashboard = () => {
     },
     {
       title: "Total Deposits",
-      value: `${monthlySummary.totalDeposits || 0}`,
+      value: `${monthlySummary.totalDeposits || 0} ৳`,
       icon: DollarSign,
       color: "bg-yellow-500",
       change: "+8%",
@@ -63,7 +63,7 @@ const Dashboard = () => {
     },
     {
       title: "Total Bazaar Cost",
-      value: `${monthlySummary.totalBazaarCost || 0}`,
+      value: `${monthlySummary.totalBazaarCost || 0} ৳`,
       icon: ShoppingCart,
       color: "bg-red-500",
       change: "+15%",
@@ -71,7 +71,7 @@ const Dashboard = () => {
     },
     {
       title: "Current Balance",
-      value: `${monthlySummary.totalDeposits - monthlySummary.totalBazaarCost}`,
+      value: `${monthlySummary.totalDeposits - monthlySummary.totalBazaarCost} ৳`,
       icon: DollarSign,
       color: "bg-blue-500",
       change: "+0%",
@@ -148,7 +148,7 @@ const Dashboard = () => {
                       {card.title}
                     </p>
                     <p className="text-3xl font-bold text-gray-900 mb-2">
-                      {card.value}
+                      {card.value} 
                     </p>
                   </div>
                   <div
