@@ -124,7 +124,7 @@ const Members = () => {
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors cursor-pointer"
         >
           <Plus className="h-5 w-5" />
           Add Member
@@ -204,21 +204,21 @@ const Members = () => {
             <select
               value={filterRole}
               onChange={(e) => setFilterRole(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
             >
-              <option value="all">All Roles</option>
-              <option value="viewer">Member</option>
-              <option value="manager">Manager</option>
+              <option value="all" className='cursor-pointer'>All Roles</option>
+              <option value="viewer" className='cursor-pointer'>Member</option>
+              <option value="manager" className='cursor-pointer'>Manager</option>
             </select>
             
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
             >
-              <option value="all">All Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
+              <option value="all" className='cursor-pointer'>All Status</option>
+              <option value="active" className='cursor-pointer'>Active</option>
+              <option value="inactive" className='cursor-pointer'>Inactive</option>
             </select>
           </div>
           
@@ -314,19 +314,19 @@ const Members = () => {
                     <div className="flex items-center justify-end gap-2">
                       <button
                         onClick={() => openViewModal(member)}
-                        className="text-blue-600 hover:text-blue-900 p-1 rounded transition-colors"
+                        className="text-blue-600 hover:text-blue-900 p-1 rounded transition-colors cursor-pointer"
                       >
                         <Eye className="h-4 w-4" />
                       </button>
                       <button
                         onClick={() => openEditModal(member)}
-                        className="text-green-600 hover:text-green-900 p-1 rounded transition-colors"
+                        className="text-green-600 hover:text-green-900 p-1 rounded transition-colors cursor-pointer"
                       >
                         <Edit className="h-4 w-4" />
                       </button>
                       <button
                         onClick={() => handleDeleteMember(member.id)}
-                        className="text-red-600 hover:text-red-900 p-1 rounded transition-colors"
+                        className="text-red-600 hover:text-red-900 p-1 rounded transition-colors cursor-pointer"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -409,14 +409,14 @@ const Members = () => {
               <div className="flex gap-3 pt-4">
                 <button
                   type="submit"
-                  className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+                  className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
                 >
                   Add Member
                 </button>
                 <button
                   type="button"
                   onClick={() => { setShowAddModal(false); resetForm(); }}
-                  className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors"
+                  className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -496,14 +496,14 @@ const Members = () => {
               <div className="flex gap-3 pt-4">
                 <button
                   type="submit"
-                  className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors"
+                  className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors cursor-pointer "
                 >
                   Update Member
                 </button>
                 <button
                   type="button"
                   onClick={() => { setShowEditModal(false); resetForm(); }}
-                  className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors"
+                  className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
