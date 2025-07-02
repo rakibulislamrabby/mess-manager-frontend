@@ -264,7 +264,7 @@ const Sidebar = () => {
       }
 
       const mealDate = new Date(meal.date).toLocaleDateString();
-      doc.text(`• ${mealDate}: ${meal.totalMeals} meals (B:${meal.breakfast.length}, L:${meal.lunch.length}, D:${meal.dinner.length})`, margin + 5, yPosition);
+      doc.text(`• ${mealDate}: ${meal.count} meals (${meal.members.length} members)`, margin + 5, yPosition);
       yPosition += 5;
     });
 

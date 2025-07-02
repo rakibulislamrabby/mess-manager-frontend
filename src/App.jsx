@@ -9,6 +9,7 @@ import MealManagement from './pages/MealManagement';
 import Deposits from './pages/Deposits';
 import Members from './pages/Members';
 import BazarCost from './pages/BazarCost';
+import Reports from './pages/Reports';
 import './App.css';
 
 // Protected Route wrapper with loading state
@@ -72,6 +73,7 @@ function AppLayout() {
               <Route path="/members" element={<ProtectedRoute><Members /></ProtectedRoute>} />
               <Route path="/bazaar" element={<ProtectedRoute><BazarCost /></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
               {/* Add more routes here as you build more pages */}
               <Route path="*" element={<Navigate to="/dashboard" />} />
             </Routes>

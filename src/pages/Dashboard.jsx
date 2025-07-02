@@ -84,7 +84,7 @@ const Dashboard = () => {
       month: "short",
       day: "numeric",
     }),
-    meals: meal.totalMeals,
+    meals: meal.count,
   }));
 
   const balanceChartData = userBalances.map((user) => ({
@@ -363,13 +363,12 @@ const Dashboard = () => {
                     })}
                   </p>
                   <p className="text-sm text-gray-600">
-                    {meal.breakfast.length} breakfast, {meal.lunch.length}{" "}
-                    lunch, {meal.dinner.length} dinner
+                    {meal.count} meals • {meal.members.length} members
                   </p>
                 </div>
                 <div className="text-right">
                   <p className="font-semibold text-gray-900">
-                    {meal.totalMeals} meals
+                    {meal.count} meals
                   </p>
                   <p className="text-sm text-gray-600">Total</p>
                 </div>
@@ -404,7 +403,7 @@ const Dashboard = () => {
                     {cost.amount} Taka
                   </p>
                   <p className="text-sm text-gray-600">
-                    {cost.items.length} items
+                    Purchased by: {cost.purchaser}
                   </p>
                 </div>
               </div>

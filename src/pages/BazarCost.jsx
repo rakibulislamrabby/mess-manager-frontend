@@ -86,8 +86,7 @@ const BazarCost = () => {
       date: new Date().toISOString().split('T')[0],
       amount: '',
       description: '',
-      purchasedBy: '',
-      items: [{ name: '', amount: '' }]
+      purchasedBy: ''
     });
   };
 
@@ -97,8 +96,7 @@ const BazarCost = () => {
       date: cost.date,
       amount: cost.amount.toString(),
       description: cost.description,
-      purchasedBy: cost.purchasedBy || '',
-      items: cost.items || [{ name: '', amount: '' }]
+      purchasedBy: cost.purchasedBy || ''
     });
     setShowEditModal(true);
   };
@@ -108,29 +106,7 @@ const BazarCost = () => {
     setShowViewModal(true);
   };
 
-  const addItem = () => {
-    setFormData({
-      ...formData,
-      items: [...formData.items, { name: '', amount: '' }]
-    });
-  };
 
-  const removeItem = (index) => {
-    const newItems = formData.items.filter((_, i) => i !== index);
-    setFormData({
-      ...formData,
-      items: newItems
-    });
-  };
-
-  const updateItem = (index, field, value) => {
-    const newItems = [...formData.items];
-    newItems[index] = { ...newItems[index], [field]: value };
-    setFormData({
-      ...formData,
-      items: newItems
-    });
-  };
 
   return (
     <div className="p-6 space-y-6 max-w-7xl w-full">
@@ -275,7 +251,7 @@ const BazarCost = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {cost.items?.length || 0} items
+                    {cost.description}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="text-sm font-medium text-red-600">{cost.amount} ৳</span>
@@ -376,46 +352,6 @@ const BazarCost = () => {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Items</label>
-                <div className="space-y-2">
-                  {formData.items.map((item, index) => (
-                    <div key={index} className="flex gap-2">
-                      <input
-                        type="text"
-                        placeholder="Item name"
-                        value={item.name}
-                        onChange={(e) => updateItem(index, 'name', e.target.value)}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                      <input
-                        type="number"
-                        placeholder="Amount"
-                        value={item.amount}
-                        onChange={(e) => updateItem(index, 'amount', e.target.value)}
-                        className="w-32 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                      {formData.items.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => removeItem(index)}
-                          className="px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={addItem}
-                    className="text-blue-600 hover:text-blue-700 text-sm font-medium cursor-pointer"
-                  >
-                    + Add Item
-                  </button>
-                </div>
-              </div>
-
               <div className="flex gap-3 pt-4">
                 <button
                   type="submit"
@@ -503,46 +439,6 @@ const BazarCost = () => {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Items</label>
-                <div className="space-y-2">
-                  {formData.items.map((item, index) => (
-                    <div key={index} className="flex gap-2">
-                      <input
-                        type="text"
-                        placeholder="Item name"
-                        value={item.name}
-                        onChange={(e) => updateItem(index, 'name', e.target.value)}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                      <input
-                        type="number"
-                        placeholder="Amount"
-                        value={item.amount}
-                        onChange={(e) => updateItem(index, 'amount', e.target.value)}
-                        className="w-32 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                      {formData.items.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => removeItem(index)}
-                          className="px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={addItem}
-                    className="text-blue-600 hover:text-blue-700 text-sm font-medium cursor-pointer"
-                  >
-                    + Add Item
-                  </button>
-                </div>
-              </div>
-
               <div className="flex gap-3 pt-4">
                 <button
                   type="submit"
@@ -607,20 +503,6 @@ const BazarCost = () => {
                   </div>
                 </div>
               </div>
-              
-              {selectedCost.items && selectedCost.items.length > 0 && (
-                <div>
-                  <p className="text-sm text-gray-500 mb-2">Items</p>
-                  <div className="space-y-2">
-                    {selectedCost.items.map((item, index) => (
-                      <div key={index} className="flex justify-between p-2 bg-gray-50 rounded">
-                        <span>{item.name}</span>
-                        <span className="font-medium">{item.amount} ৳</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
               
               <div className="flex gap-3 pt-4">
                 <button
