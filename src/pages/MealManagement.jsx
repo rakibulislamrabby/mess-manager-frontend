@@ -265,26 +265,26 @@ const MealManagement = () => {
                   </td>
                   <td className="px-2 sm:px-6 py-4">
                     <div className="text-sm text-gray-900">
-                      {meal.breakfast.length} members
+                      {meal?.breakfast?.length} members
                     </div>
                     <div className="text-xs text-gray-500">
-                      {meal.breakfast.map(id => getMemberName(id)).join(', ')}
+                      {meal?.breakfast?.map(id => getMemberName(id)).join(', ')}
                     </div>
                   </td>
                   <td className="px-2 sm:px-6 py-4">
                     <div className="text-sm text-gray-900">
-                      {meal.lunch.length} members
+                      {meal?.lunch?.length} members
                     </div>
                     <div className="text-xs text-gray-500">
-                      {meal.lunch.map(id => getMemberName(id)).join(', ')}
+                      {meal?.lunch?.map(id => getMemberName(id)).join(', ')}
                     </div>
                   </td>
                   <td className="px-2 sm:px-6 py-4">
                     <div className="text-sm text-gray-900">
-                      {meal.dinner.length} members
+                      {meal?.dinner?.length} members
                     </div>
                     <div className="text-xs text-gray-500">
-                      {meal.dinner.map(id => getMemberName(id)).join(', ')}
+                      {meal?.dinner?.map(id => getMemberName(id)).join(', ')}
                     </div>
                   </td>
                   <td className="px-2 sm:px-6 py-4 whitespace-nowrap">

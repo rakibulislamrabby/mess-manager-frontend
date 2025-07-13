@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useLogin } from '../hooks/auth/use-login';
 import { LogIn, Users, Plus, UserCheck, Eye, EyeOff } from 'lucide-react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 
@@ -8,14 +9,14 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [showMessOptions, setShowMessOptions] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [messName, setMessName] = useState('');
   const [messAddress, setMessAddress] = useState('');
   const [messId, setMessId] = useState('');
 
-  const { login, createMess, joinMess, isLoading: authLoading } = useAuth();
+  const { createMess, joinMess, isLoading: authLoading } = useAuth();
+  const { login, isLoading: loginLoading, isError: loginError, error: loginErrorData } = useLogin();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -28,27 +29,37 @@ const Login = () => {
     }
   }, [location, navigate]);
 
+  // Handle login error
+  useEffect(() => {
+    if (loginError && loginErrorData) {
+      setError(loginErrorData?.response?.data?.message || loginErrorData?.message || 'Login failed. Please try again.');
+    }
+  }, [loginError, loginErrorData]);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
-    setIsLoading(true);
 
-    const result = await login(email, password);
-    
-    if (result.success) {
-      setShowMessOptions(true);
-    } else {
-      setError(result.error);
+    try {
+      const result = await login({
+        email: email,
+        password: password
+      });
+      
+      // If login is successful, show mess options
+      if (result) {
+        setShowMessOptions(true);
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('Login failed. Please try again.');
     }
-    
-    setIsLoading(false);
   };
 
   const handleCreateMess = async (e) => {
     e.preventDefault();
     setError('');
-    setIsLoading(true);
 
     const result = await createMess({
       name: messName,
@@ -60,14 +71,11 @@ const Login = () => {
     } else {
       setError(result.error);
     }
-    
-    setIsLoading(false);
   };
 
   const handleJoinMess = async (e) => {
     e.preventDefault();
     setError('');
-    setIsLoading(true);
 
     const result = await joinMess(messId);
 
@@ -76,8 +84,6 @@ const Login = () => {
     } else {
       setError(result.error);
     }
-    
-    setIsLoading(false);
   };
 
   // Show loading screen while auth is initializing
@@ -142,10 +148,10 @@ const Login = () => {
                 </div>
                 <button
                   type="submit"
-                  disabled={isLoading}
+                  disabled={loginLoading}
                   className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
                 >
-                  {isLoading ? 'Creating...' : 'Create Mess'}
+                  {loginLoading ? 'Creating...' : 'Create Mess'}
                 </button>
               </form>
             </div>
@@ -172,10 +178,10 @@ const Login = () => {
                 </div>
                 <button
                   type="submit"
-                  disabled={isLoading}
+                  disabled={loginLoading}
                   className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
                 >
-                  {isLoading ? 'Joining...' : 'Join Mess'}
+                  {loginLoading ? 'Joining...' : 'Join Mess'}
                 </button>
               </form>
             </div>
@@ -261,10 +267,10 @@ const Login = () => {
 
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={loginLoading}
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 cursor-pointer"
             >
-              {isLoading ? 'Signing in...' : 'Sign in'}
+              {loginLoading ? 'Signing in...' : 'Sign in'}
             </button>
           </form>
 
@@ -279,7 +285,7 @@ const Login = () => {
               </Link>
             </p>
             <p className="text-xs text-gray-500">
-              Demo credentials: john@example.com / password123
+              Demo credentials: zesan@gmail.com / 123456
             </p>
           </div>
         </div>
